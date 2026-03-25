@@ -21,7 +21,7 @@ An AI-powered web application that analyzes resumes and matches them with job de
 ## ▶️ How to Run
 
 ### 1. Clone repo
-git clone https://github.com/your-username/AI-Resume-Analyzer-Pro.git
+git clone https://github.com/SUJAYBARAI/AI-Resume-Analyzer.git
 
 ### 2. Install dependencies
 pip install -r requirements.txt
