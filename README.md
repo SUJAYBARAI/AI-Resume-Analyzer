@@ -37,8 +37,5 @@ uvicorn main:app --reload
 cd frontend
 streamlit run app.py
 
-## 📸 Demo
-(Add screenshots here)
-
 ## 💯 Author
 Sujay Barai
