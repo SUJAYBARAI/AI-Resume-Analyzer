@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+scikit-learn
+PyPDF2
+spacy
+streamlit
+reportlab
+python-multipart
+requests
