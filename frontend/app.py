@@ -23,7 +23,7 @@ h1 {
 """, unsafe_allow_html=True)
 
 # 🧠 Title
-st.title("🚀 AI Resume Analyzer Pro")
+st.title("🚀 AI Resume Analyzer")
 
 # 📂 Upload + JD
 col1, col2 = st.columns(2)
@@ -39,7 +39,7 @@ if st.button("Analyze Resume"):
     if file and job_desc:
         with st.spinner("Analyzing... ⏳"):
             res = requests.post(
-                "http://127.0.0.1:8000/analyze/",
+                "https://ai-resume-analyzer-0h1a.onrender.com/",
                 files={"file": file},
                 data={"job_desc": job_desc}
             ).json()
@@ -72,7 +72,7 @@ if st.button("📥 Generate Report"):
     if file and job_desc:
         with st.spinner("Generating report... ⏳"):
             res = requests.post(
-                "http://127.0.0.1:8000/download-report/",
+                "https://ai-resume-analyzer-0h1a.onrender.com/",
                 files={"file": file},
                 data={"job_desc": job_desc}
             )

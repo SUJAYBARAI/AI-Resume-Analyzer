@@ -3,7 +3,7 @@ from fastapi.responses import FileResponse
 from backend.report import generate_report
 from backend.utils import extract_text_from_pdf
 from backend.model import calculate_similarity
-app = FastAPI(title="AI Resume Analyzer Pro")
+app = FastAPI(title="AI Resume Analyzer")
 
 @app.post("/analyze/")
 async def analyze(file: UploadFile = File(...), job_desc: str = Form(...)):
