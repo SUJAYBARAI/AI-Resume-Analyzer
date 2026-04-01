@@ -1,6 +1,6 @@
 from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.responses import FileResponse
-from report import generate_report
+from backend.report import generate_report
 from backend.utils import extract_text_from_pdf
 from backend.model import calculate_similarity
 app = FastAPI(title="AI Resume Analyzer Pro")
