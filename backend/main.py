@@ -1,7 +1,8 @@
 from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.responses import FileResponse
 from backend.utils import extract_text_from_pdf
-from backend.model import calculate_similarity
+from backend.model import calculate_similarity, extract_skills, calculate_final_score
+from backend.report import generate_report
 
 app = FastAPI(title="AI Resume Analyzer")
 
@@ -18,17 +19,20 @@ async def analyze(file: UploadFile = File(...), job_desc: str = Form(...)):
         if not resume_text.strip():
             return {"error": "Could not extract text from PDF"}
 
-        # ✅ SAFE similarity
-        try:
-            similarity = calculate_similarity(resume_text, job_desc)
-        except:
-            similarity = 50  # fallback
+        similarity = calculate_similarity(resume_text, job_desc)
+
+        resume_skills = extract_skills(resume_text)
+        job_skills = extract_skills(job_desc)
+
+        missing_skills = list(set(job_skills) - set(resume_skills))
+
+        final_score = calculate_final_score(similarity, resume_skills, job_skills)
 
         return {
             "similarity": similarity,
-            "final_score": similarity,
-            "resume_skills": [],
-            "missing_skills": []
+            "final_score": final_score,
+            "resume_skills": resume_skills,
+            "missing_skills": missing_skills
         }
 
     except Exception as e:
@@ -39,24 +43,24 @@ async def analyze(file: UploadFile = File(...), job_desc: str = Form(...)):
 async def download_report(file: UploadFile = File(...), job_desc: str = Form(...)):
     try:
         contents = await file.read()
-
-        if not contents:
-            return {"error": "Empty file"}
-
         resume_text = extract_text_from_pdf(contents)
 
-        if not resume_text.strip():
-            return {"error": "PDF text extraction failed"}
-
         similarity = calculate_similarity(resume_text, job_desc)
+        resume_skills = extract_skills(resume_text)
+        job_skills = extract_skills(job_desc)
 
-        # simple dummy PDF (safe)
-        file_path = "report.pdf"
+        missing_skills = list(set(job_skills) - set(resume_skills))
+        final_score = calculate_final_score(similarity, resume_skills, job_skills)
 
-        with open(file_path, "w") as f:
-            f.write(f"Resume Score: {similarity}")
+        data = {
+            "final_score": final_score,
+            "resume_skills": resume_skills,
+            "missing_skills": missing_skills
+        }
 
-        return FileResponse(file_path, media_type="application/pdf", filename="report.pdf")
+        file_path = generate_report(data)
+
+        return FileResponse(file_path, media_type="application/pdf", filename="resume_report.pdf")
 
     except Exception as e:
         return {"error": str(e)}
