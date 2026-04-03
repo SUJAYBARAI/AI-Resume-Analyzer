@@ -11,5 +11,5 @@ def extract_text_from_pdf(file_bytes):
 
         return text.lower()
 
-    except:
+    except Exception as e:
         return ""
