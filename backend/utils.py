@@ -7,7 +7,9 @@ def extract_text_from_pdf(file_bytes):
         text = ""
 
         for page in pdf.pages:
-            text += page.extract_text() or ""
+            extracted = page.extract_text()
+            if extracted:
+                text += extracted
 
         return text.lower()
 
